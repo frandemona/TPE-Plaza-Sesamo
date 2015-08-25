@@ -1,0 +1,78 @@
+tipo Pedido {
+	observador numero (p: Pedido) : Z;
+	observador atendio (p: Pedido) : Empleado;
+	observador combos (p: Pedido) : [Combo];
+	invariante numeroPositivo : numero(p) > 0;
+	invariante pideAlgo : |combos(p)| > 0;
+}
+
+
+//Crea un pedido con número n, empleado e y una lista de combos cs.
+
+5. problema nuevoP (n: Z, e: Empleado, cs: [Combo]) = result : Pedido {
+	
+
+}
+
+
+//Devuelve el número correspondiente al pedido p.
+
+6. problema numeroP (p: Pedido) = result : Z {
+	
+	
+}
+
+
+
+//Devuelve el empleado asociado al pedido p.
+
+7. problema atendioP (p: Pedido) = result : Empleado {
+	
+	
+}
+
+
+//Devuelve la lista de combos correspondiente al pedido p.
+
+8. problema combosP (p: Pedido) = result : [Combo] {
+	
+	
+}
+
+
+//Agrega el combo c al final de la lista de combos del pedido p
+
+9. problema agregarComboP (p: Pedido, c: Combo) {
+	
+	
+}
+
+
+//Dado un pedido p, anula el combo ubicado en la posición i del observador combos(p)
+
+10. problema anularComboP (p: Pedido, i:Z) {
+	
+	
+}
+
+
+/* Quién no ha ido con un amigo a un local de fat food y a último momento este decide cambiar de opinión acerca de la
+bebida pedida... que prefiere bajas calorías, que si es de esta línea de gaseosas prefiere agua, etc. Así, el local necesita
+de esta herramienta fundamental: Dado el pedido p, modifica el pedido para cambiar la bebida del combo ubicado en
+la posición i del observador combos(p) por la bebida b. */
+
+11. problema cambiarBebidaComboP (p: Pedido, b: Bebida, i:Z) {
+	
+	
+}
+
+
+/* Modifica el pedido por un pedido de igual tama˜ no en el que no haya combos
+repetidos, respetando la mayor cantidad de combos posibles. Si fuera necesario modificar algún combo, deben utilizarse
+bebidas y sandwiches que se encuentren en el pedido original. Importante: tener en cuenta que esto no siempre es
+posible (requiere ...) */
+
+12. problema elMezcladitoP (p: Pedido) {
+	
+	
+}

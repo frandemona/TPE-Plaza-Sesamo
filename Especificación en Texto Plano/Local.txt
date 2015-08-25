@@ -1,0 +1,170 @@
+tipo Local {
+	observador stockBebidas (l: Local, b: Bebida) : Cantidad;
+	requiere b ∈ bebidasDelLocal(l);
+	observador stockSandwiches (l: Local, h: Hamburguesa) : Cantidad;
+	requiere h ∈ sandwichesDelLocal(l);
+	observador bebidasDelLocal (l:Local) : [Bebida];
+	observador sandwichesDelLocal (l:Local) : [Hamburguesa];
+	observador empleados (l: Local) : [Empleado];
+	observador desempleados (l: Local) : [Empleado];
+	observador energiaEmpleado (l: Local, e: Empleado) : Energia;
+	requiere e ∈ empleados(l);
+	observador ventas (l: Local) : [Pedido];
+	invariante hayBebidasySonDistintas : |bebidasDelLocal(l)| > 0 ∧ distintos(bebidasDelLocal(l));
+	invariante haySandwichesySonDistintos : |sandwichesDelLocal(l)| > 0 ∧ distintos(sandwichesDelLocal(l));
+	invariante stockBebidasPositivo : (∀b ← bebidasDelLocal(l))stockBebidas(l,b) ≥ 0;
+	invariante stockSandwichesPositivo : (∀h ← sandwichesDelLocal(l))stockSandwiches(l,h) ≥ 0;
+	invariante empleadosDistintos : distintos(empleados(l) + +desempleados(l));
+	invariante energiaHasta100 : (∀e ← empleados(l))energiaEnRango(energiaEmpleado(l,e));
+	invariante empleadosQAtendieronDelLocal : (∀v ← ventas(l))atendio(v) ∈ empleados(l) + +desempleados(l);
+	invariante ventasCorrelativas : ...;
+	invariante combosDeLocal : ...;
+}
+
+
+/* Los números de pedidos correspondiente a las ventas son correlativos. Es decir, no hay repetidos y no faltan números
+en el medio. Ejemplo: 4,5,6,7 son correlativos. 4,5,7 no lo son. */
+
+13. invariante ventasCorrelativas : 
+
+
+// Los combos correspondiente a las ventas, son combos que se expenden en el local.
+
+14. invariante combosDeLocal : 
+
+
+// Devuelve el stock de bebida b en el local l.
+
+15. problema stockBebidasL (l: Local, b:Bebida) = result : Cantidad {
+	
+
+}
+
+
+// Devuelve el stock de sandwich h en el local l.
+
+16. problema stockSandwichesL (l: Local, h:Hamburguesa) = result : Cantidad {
+	
+
+}
+
+
+// Devuelve la lista de bebidas que se expenden en el local l.
+
+17. problema bebidasDelLocalL (l: Local) = result : [Bebida] {
+	
+
+}
+
+
+// Devuelve la lista de sandwiches que se expenden en el local l.
+
+18. problema sandwichesDelLocalL (l: Local) = result : [Hamburguesa] {
+	
+
+}
+
+
+// Devuelve la lista de empleados que atienden en el local l.
+
+19. problema empleadosL (l: Local) = result : [Empleado] {
+	
+
+}
+
+
+// Devuelve la lista de ex-empleados del local l.
+
+20. problema desempleadosL (l: Local) = result : [Empleado] {
+	
+
+}
+
+
+// Devuelve la energía del empleado e en el local l.
+
+21. problema energiaEmpleadoL (l: Local, e:Empleado) = result : Energia {
+	
+
+}
+
+
+// Devuelve las ventas del local l.
+
+22. problema ventasL (l: Local) = result : [Pedido] {
+	
+
+}
+
+
+/* Indica si las ventas que realizaron los empleados actuales del local l, fueron hechas rotando de manera estricta. Ejemplo:
+Si los empleados actuales del local l son A,B,C, y D es un ex-empleado y se realizaron las ventas B,D,A,D,C,B,D,D,A,C,B,A
+debería devolver verdadero (las ventas de D no deben considerarse ya que corresponde a un ex-empleado). */
+
+23. problema unaVentaCadaUno (l:Local) = result : Bool {
+	
+
+}
+
+
+/* Agrega el pedido p a la lista de ventas del local l, en caso de ser posible. Por normas de la empresa, el pedido sólo
+puede ser atendido por un empleado del local. Si el empleado no cuenta con la energía suficiente como para atender el
+pedido, dicha persona es despedida y por lo tanto pasa a formar parte del staff de desempleados. Al realizar la venta,
+el stock debe ser actualizado. Lo mismo sucede con la energía del empleado. La energía del empleado termina siendo
+la energía que tenía previo a vender el pedido, menos la sumatoria de las dificultades de los combos del pedido. */
+
+24. problema venderL (l: Local, p:Pedido) {
+	
+
+}
+
+
+// Devuelve la lista de empleados del local l que más ventas hicieron y dentro de este grupo, los que más combos vendieron.
+
+25. problema candidatosAEmpleadosDelMesL (l: Local) = result : [Empleado] {
+	
+
+}
+
+
+/* Modifica el local l, sacándole una cantidad n de energía al empleado e. Si el empleado queda con un nivel de energía
+negativa, el mismo es despedido del local. */
+
+26. problema sancionL (l: Local, e:Empleado, n:Energia) {
+	
+
+}
+
+
+/* Devuelve el empleado actual que más descanso se tomó entre pedido y pedido. Por ejemplo, si los empleados son A, B
+y C, y atendieron los pedidos en el siguiente orden: A-B-C-B-C-B-C-B-C-B-A, el descanso más largo es el de A (9
+ventas), porque B sólo tiene descansos de una venta, y el descanso más lardo de C es de 2 ventas. En el caso de que
+un empleado no hubiese atendido pedidos, se toma que su descanso es la cantidad total de ventas que se hicieron en el
+local. En el caso de que un empleado hubiese atendido al menos un pedido, tener en cuenta que tambi´ en se contabilizan
+como descansos a) la cantidad de pedidos entre el comienzo y el primer pedido que atendió, y b) entre el último pedido
+que atendió y el total de pedidos. */
+
+27. problema elVagonetaL (l: Local) = result : Empleado {
+	
+
+}
+
+
+/* Elimina el pedido número n de la lista de ventas. Para realizar esta operación
+el que atendió el pedido debe ser empleado del local. Se tiene que actualizar el stock y la energía del empleado. */
+
+28. problema anularPedidoL (l: Local, n:Z) {
+	
+
+}
+
+
+/* Sólo en el caso de ser posible (ver stock), se agrega el combo c al pedido número n de ventas.
+
+Importante: Esta operación sólo se puede realizar en caso de que, quien haya atendido el pedido n, aún siga siendo
+empleado y tenga energía suficiente para mantenerse como empleado al entregar ese combo extra. */
+
+29. problema agregarComboAlPedidoL (l: Local, c: Combo, n:Z) {
+	
+
+}
