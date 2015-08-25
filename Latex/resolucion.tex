@@ -1,9 +1,23 @@
-\documentclass[a4paper]{article}
+\documentclass[10pt,a4paper,spanish]{article} 
 
+\usepackage{a4wide}
+\usepackage{amsmath, amscd, amsthm, latexsym}
 \usepackage[spanish]{babel} % Le indicamos a LaTeX que vamos a escribir en español.
 \usepackage[latin1]{inputenc} % Permite utilizar tildes y eñes normalmente
-%\usepackage{framed}
+\usepackage{soul}
+%\usepackage[utf8]{inputenc}
+%\usepackage{bbm}
+\usepackage{framed}
+\usepackage{listings}
+\usepackage{enumerate}
+\usepackage{xspace}
+\usepackage{longtable}
+\usepackage{caratula}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+%\overfullrule=2cm %Ver margenes en negro para overfull \hbox
 \input{Algo1Macros}% Macros especificas para especificar problemas en AyEDI
+%\include{Codigo} Para el TPI
 
 \newcommand{\comen}[2]{%
 \begin{framed}
@@ -12,7 +26,44 @@
 }
 % Aca solo vamos a poner el esqueleto del documento, pero no vamos a especificar nada.
 
+% Encabezado
+\lhead{Algoritmos y Estructuras de Datos I}
+\rhead{Grupo XX - Plaza sésamo}
+% Pie de pagina
+\renewcommand{\footrulewidth}{0.4pt}
+\lfoot{Facultad de Ciencias Exactas y Naturales}
+\rfoot{Universidad de Buenos Aires}
+
+
 \begin{document} % Todo lo que escribamos a partir de aca va a aparecer en el documento.
+
+% Datos de caratula
+\materia{Algoritmos y Estructura de Datos I}
+\titulo{Trabajo Pr\'actico 1 - Especificaci\'on}
+\subtitulo{Fat Food}
+\grupo{Grupo xx Plaza Sesamo}
+\fechas{\today}
+\integrante{XXXX XXXX, XXX XXX}{XXX/XX}{XXX@XXX.XXX}
+\integrante{XXXX XXXX, XXX XXX}{XXX/XX}{XXX@XXX.XXX}
+\integrante{Mart\'in Darricades, Mat\'ias Facundo}{480/13}{matiasamd@gmail.com}
+\integrante{Solari Saban, Tom\'as Le\'on}{774/14}{tomassolari94@gmail.com}
+
+% Pongan cuantos integrantes quieran
+
+\maketitle
+
+
+\newpage
+
+% Para crear un indice
+\tableofcontents
+	
+
+% Forzar salto de pagina
+\clearpage
+
+
+\newpage
 
 
 \section{Tipos} %Defino los renombres de tipos básicos.
@@ -49,4 +100,22 @@
 \input{espec/auxiliares.tex}
 
 \end{document} %Terminé!
+
+
+%Muestra de como poner las cosas para el TPI
+
+%\section{Implementaci\'on}
+
+
+
+
+%\subsection{Flor}
+
+%\lstinputlisting[caption=Flor.h]{../src/Flor.h}
+
+%\lstinputlisting[caption=Flor.cpp]{../src/Flor.cpp}
+
+%\newpage
+
+
 
