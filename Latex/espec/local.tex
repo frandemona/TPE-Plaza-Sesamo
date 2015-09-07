@@ -1,26 +1,37 @@
 
 \begin{problema}{stockBebidasL}{l: Local, b:Bebida}{Cantidad}
+\requiere{ b \in bebidasDelLocal(l) } %esto me parece que asi no se puede
+\asegura{ \res == stockBebidas(l,b)}
 \end{problema}
 
 \begin{problema}{stockSandwichesL}{l: Local, h:Hamburguesa}{Cantidad}
+\requiere{ h \in sandwichesDelLocal(l) } %esto me parece que asi no se puede
+\asegura{ \res == stockSandwiches(l,h)}
 \end{problema}
 
 \begin{problema}{bebidasDelLocalL}{l: Local}{[Bebida]}
+\asegura{ mismos (\res , bebidasDelLocal(l))}
 \end{problema}
 	
 \begin{problema}{sandwichesDelLocalL}{l: Local}{[Hamburguesa]}
+\asegura{ mismos (\res , sandwichesDelLocal(l))}
 \end{problema}
 
 \begin{problema}{empleadosL}{l: Local}{[Empleado]}
+\asegura{ mismos (\res , empleados(l))}
 \end{problema}
 
 \begin{problema}{desempleadosL}{l: Local}{[Empleado]}
+\asegura{ mismos (\res , desempleados(l))}
 \end{problema}
 
 \begin{problema}{energiaEmpleadoL}{l: Local, e:Empleado}{Energia}
+\requiere{ e \in empleados(l) } %esto me parece que asi no se puede
+\asegura{ \res == energiaEmpleado(l,e)})}
 \end{problema}
 
 \begin{problema}{ventasL}{l: Local}{[Pedido]}
+\asegura{ mismos (\res , ventas(l))}
 \end{problema}
 
 \begin{problema}{unaVentaCadaUno}{l:Local}{\bool}

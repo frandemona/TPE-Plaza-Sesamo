@@ -11,6 +11,31 @@
 % los aux del tipo combo
 
 \subsection{Pedido}
+\aux{combosIguales}{cA: Combo, cB: Combo}{\bool}{ 
+  bebida(cA) == bebida(cB) \land sandwich(cA) == sandwich(cB)% \land dificultad(cA) == dificultad(cB) Segun el mail que mandaron la parte de dificultad no seria necesaria ya que cuando aclararon el problema elMezcladito dijeron "Si tienen distinta dificultad no se consideran distintos combos"
+}
+\aux{cantidadSandwichDistintos}{combos: \TLista{Combo}}{\ent}{
+|[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{sandwich(combos_{i}) \neq sandwich(combos_{j})}{\True} ]|
+}
+\aux{cantidadBebidaDistintos}{combos: \TLista{Combo}}{\ent}{
+|[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{bebida(combos_{i}) \neq bebida(combos_{j})}{\True} ]|
+}
+\aux{combosDistintos}{cA: Combo, cB: Combo}{\bool}{ 
+  bebida(cA) \neq bebida(cB) \lor sandwich(cA) \neq sandwich(cB)% \land dificultad(cA) == dificultad(cB) Segun el mail que mandaron la parte de dificultad no seria necesaria ya que cuando aclararon el problema elMezcladito dijeron "Si tienen distinta dificultad no se consideran distintos combos"
+}
+\aux{sandwichDistintos}{combos: \TLista{Combo}}{\TLista{Hamburguesa}}{
+[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{sandwich(combos_{i}) \neq sandwich(combos_{j})}{\True} ]
+}
+\aux{bebidaDistintos}{combos: \TLista{Combo}}{\TLista{Bebida}}{
+[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{bebida(combos_{i}) \neq bebida(combos_{j})}{\True} ]
+}
+
+\aux{mismosSandwich}{combosA: \TLista{Combo}, combosB: \TLista{Combo}}{\bool}{
+\longitud{sandwichDistintos(combosA)} == \\ \longitud{sandwichDistintos(combosB)} \land (\forall \selector{sandwichA}{sandwichDistintos(combosA)},sandwichB \selec \\ sandwichDistintos(combosB)) sandwichA == sandwichB
+}
+\aux{mismosBebida}{combosA: \TLista{Combo}, combosB: \TLista{Combo}}{\bool}{
+\longitud{bebidaDistintos(combosA)} == \\ \longitud{bebidaDistintos(combosB)} \land (\forall \selector{bebidaA}{bebidaDistintos(combosA)}, \selector{bebidaB}{bebidaDistintos(combosB)}) \\ bebidaA == bebidaB
+}
 
 % los aux del tipo pedido
 
