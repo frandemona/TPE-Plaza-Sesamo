@@ -24,10 +24,10 @@
   bebida(cA) \neq bebida(cB) \lor sandwich(cA) \neq sandwich(cB)% \land dificultad(cA) == dificultad(cB) Segun el mail que mandaron la parte de dificultad no seria necesaria ya que cuando aclararon el problema elMezcladito dijeron "Si tienen distinta dificultad no se consideran distintos combos"
 }
 \aux{sandwichDistintos}{combos: \TLista{Combo}}{\TLista{Hamburguesa}}{
-[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{sandwich(combos_{i}) \neq sandwich(combos_{j})}{\True} ]
+[ sandwich(combos_{i}) | \selector{i}{\rangoca{0}{\longitud{combos}}}, \\ \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{sandwich(combos_{i}) \neq sandwich(combos_{j})}{\True} ]
 }
 \aux{bebidaDistintos}{combos: \TLista{Combo}}{\TLista{Bebida}}{
-[ combos_{i} | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{bebida(combos_{i}) \neq bebida(combos_{j})}{\True} ]
+[ bebida(combos_{i}) | \selector{i}{\rangoca{0}{\longitud{combos}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos}}}, i \leq j \land \IfThenElse{i < j}{bebida(combos_{i}) \neq bebida(combos_{j})}{\True} ]
 }
 
 \aux{mismosSandwich}{combosA: \TLista{Combo}, combosB: \TLista{Combo}}{\bool}{
@@ -40,6 +40,61 @@
 % los aux del tipo pedido
 
 \subsection{Local}
+
+\aux{menorNumeroPedido}{ventas: \TLista{Pedido}}{\ent}{
+\IfThenElse{/longitud{ventas} > 1}{|[ numero(ventas_{i}) | \selector{i}{\rangoca{0}{\longitud{ventas}}},\\ \forall \selector{j}{\rangoca{0}{\longitud{ventas}}}, i \neq j \land numero(ventas_{i}) < numero(ventas_{j}) ]|}{numero(ventas_{0})}
+}
+
+\aux{mayorNumeroPedido}{ventas: \TLista{Pedido}}{\ent}{
+\IfThenElse{/longitud{ventas} > 1}{|[ numero(ventas_{i}) | \selector{i}{\rangoca{0}{\longitud{ventas}}},\\ \forall \selector{j}{\rangoca{0}{\longitud{ventas}}}, i \neq j \land numero(ventas_{i}) > numero(ventas_{j}) ]|}{numero(ventas_{0})}
+}
+
+\aux{sandwichLocal}{ventas: \TLista{Pedido}}{\TLista{Hamburguesa}}{
+[ sandwichDistintos(combos(ventas_{i}))_{j} | \selector{i}{\rangoca{0}{\longitud{ventas}}}, \\ \forall \selector{j}{\rangoca{0}{\longitud{sandwichDistintos(combos(ventas_{i}))}}}]
+}
+
+\aux{bebidaLocal}{ventas: \TLista{Pedido}}{\TLista{Bebida}}{
+[ bebidaDistintos(combos(ventas_{i}))_{j} | \selector{i}{\rangoca{0}{\longitud{ventas}}}, \\ \forall \selector{j}{\rangoca{0}{\longitud{bebidaDistintos(combos(ventas_{i}))}}}]
+}
+
+\aux{quienAtiendeVentasEmpleado}{ventas: \TLista{Pedido}, l: Local}{\TLista{Empleado}}{
+[atendio(ventas_{i}) | \selector{i}{\rangoca{0}{\longitud{ventas}}}, \\ empleadoPerteneceLocal(atendio(ventas_{i}), l)]
+}
+\aux{empleadoPerteneceLocal}{e: Empleado, l: Local}{\bool}{
+(\exists \selector{i}{empleados(l)}) e == i
+}
+\aux{bebidaPerteneceLocal}{b: Bebida, l: Local}{\bool}{
+(\exists \selector{i}{bebidasDelLocal(l)}) e == i
+}
+\aux{sandwichPerteneceLocal}{h: Hamburguesa, l: Local}{\bool}{
+(\exists \selector{i}{sandwichesDelLocal(l)}) e == i
+}
+
+\aux{energiaPedido}{p: Pedido}{\ent}{
+\sum [ dificultad(combos(p)_{i}) | \selector{i}{\rangoca{0}{\longitud{combos(p)}}}]
+}
+
+\aux{cuentaSandwich}{h: Hamburgesa, combos: \TLista{Combo}}{\ent}{
+|[sandwich(c)| \selector{c}{combos}, sandwich(c) == h  ]|
+}
+
+\aux{cuentaBebida}{b: Bebida, combos: \TLista{Combo}}{\ent}{
+|[bebida(c)| \selector{c}{combos}, bebida(c) == b  ]|
+}
+
+\aux{despedirEmpleadoLocal}{l:Local,e: Empleado}{\TLista{Empleado}}{
+[empleados(l)_{i} | \selector{i}{\longitud{empleados(l)}},\\ empleados(l)_{i} \neq e ]
+}
+
+\aux{agregarDesempleadoLocal}{l:Local,e: Empleado}{\TLista{Empleado}}{
+\TLista{desempleados(l)} \masmas \TLista{e} 
+}
+
+\aux{mismosEmpleados}{empleadosA: \TLista{Empleado},empleadosB: \TLista{Empleado}}{\bool}{
+\longitud{empleadosA} == \\ \longitud{empleadosB)} \land (\forall \selector{empleadoA}{empleadosA}, \selector{empleadoB}{empleadosB})  empleadoA == empleadoB
+}
+
+
 
 % los aux del tipo local
 

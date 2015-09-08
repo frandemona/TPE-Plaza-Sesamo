@@ -1,11 +1,11 @@
 
 \begin{problema}{stockBebidasL}{l: Local, b:Bebida}{Cantidad}
-\requiere{ b \in bebidasDelLocal(l) } %esto me parece que asi no se puede
+\requiere{ bebidaPerteneceLocal(b,l) } 
 \asegura{ \res == stockBebidas(l,b)}
 \end{problema}
 
 \begin{problema}{stockSandwichesL}{l: Local, h:Hamburguesa}{Cantidad}
-\requiere{ h \in sandwichesDelLocal(l) } %esto me parece que asi no se puede
+\requiere{ sandwichPerteneceLocal(h,l) } 
 \asegura{ \res == stockSandwiches(l,h)}
 \end{problema}
 
@@ -26,8 +26,8 @@
 \end{problema}
 
 \begin{problema}{energiaEmpleadoL}{l: Local, e:Empleado}{Energia}
-\requiere{ e \in empleados(l) } %esto me parece que asi no se puede
-\asegura{ \res == energiaEmpleado(l,e)})}
+\requiere{ empleadoPerteneceLocal(e,l) } 
+\asegura{ \res == energiaEmpleado(l,e)}
 \end{problema}
 
 \begin{problema}{ventasL}{l: Local}{[Pedido]}
@@ -35,9 +35,27 @@
 \end{problema}
 
 \begin{problema}{unaVentaCadaUno}{l:Local}{\bool}
+
+\asegura{\res == lista}
+%quienAtiendeVentasEmpleado(ventas(l),l) me da la lista de empleados actuales que atendieron los pedidos
 \end{problema}
 
 \begin{problema}{venderL}{l: Local, p:Pedido}{}
+\requiere[numeroPedidoCorrecto]{numero(p) == mayorNumeroPedido(ventas(\pre{l})) + 1}
+\requiere[empleadoDelLocal]{empleadoPerteneceLocal(atendio(p),\pre{l})}
+\requiere[tieneEnergiaSuficiente]{energiaEmpleado(\pre{l},atendio(p)) \geq energiaPedido(p)}
+\requiere[stockSandwichSuficiente]{(\forall \selector{h}{sandwichDistintos(combos(p))}) ( stockSandwiches(\pre{l}, h) \\ - cuentaSandwich(h,combos(p))) > 0}
+\requiere[stockBebidaSuficiente]{(\forall \selector{b}{bebidaDistintos(combos(p))}) ( stockBebidas(\pre{l}, b) \\ - cuentaBebida(b,combos(p))) > 0}
+\modifica{l}
+\asegura{mismos(bebidasDelLocal(l),bebidasdelLocal(\pre{l}))}
+\asegura{mismos(sandwichesDelLocal(l),sandwichesDelLocal(\pre{l}))}
+\asegura{mismosEmpleados(empleados(l) \masmas desempleados(l),empleados(\pre{l}) \masmas desempleados(\pre{l}))}
+\asegura{(\forall \selector{b}{bebidaDistintos(combos(p))}) (stockBebidas(\pre{l}, b) \\ - cuentaBebida(b,combos(p))) == stockBebidas(l,b)}
+\asegura{(\forall \selector{h}{sandwichDistintos(combos(p))}) (stockSandwiches(\pre{l}, h) \\ - cuentaSandwich(h,combos(p))) == stockSandwiches(l,b)}
+\asegura{\IfThenElse{(energiaEmpleado(\pre{l},atendio(p)) - energiaPedido(p)) > 0}{(energiaEmpleado(\pre{l},atendio(p)) - energiaPedido(p)) == energiaEmpleado(l,atendio(p))}{ \\mismosEmpleados(desempleados(l),agregarDesempleadoLocal(\pre{l},atendio(p))) \land \\ mismosEmpleados(empleados(l),despedirEmpleadoLocal(\pre{l},atendio(p))) }}
+\asegura{\longitud{ventas(l)} == \longitud{ventas(\pre{l})} +1}
+\asegura{numero(p) == mayorNumeroPedido(ventas(l))}
+
 \end{problema}
 
 \begin{problema}{candidatosAEmpleadosDelMesL}{l: Local}{[Empleado]}
