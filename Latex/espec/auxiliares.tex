@@ -154,6 +154,23 @@
  atendio(pA) == atendio(pB) \land \\ mismosCombosDePedidos(combos(pA),combos(pB))
 }
 
+\aux{listaIndicesVentasEmpleados}{e: Empleado, l: Local}{\TLista{\ent}}{ 
+ [ i | \selector{e}{\\ \rangoca{0}{\longitud{quienAtiendeVentasEmpleado(ventas(l),l)}}}, quienAtiendeVentasEmpleado(ventas(l),l)_{i} == e ]
+}
+
+\aux{listaDistanciaEntreIndices}{e: Empleado, l:Local}{\TLista{\ent}}{
+\IfThenElse{ \longitud{listaIndicesVentasEmpleados(e,l) == 0} \\ }{[|[0..\longitud{quienAtiendeVentasEmpleado(ventas(l),l)} -1]|]}{
+[\IfThenElse{ i == -1  \\ }{|[0..listaIndicesVentasEmpleados(e,l)_{0}]| }{ \IfThenElse{i == \longitud{listaIndicesVentasEmpleados(e,l)} - 1}{ \\ |[listaIndicesVentasEmpleados(e,l)_{i}..\longitud{quienAtiendeVentasEmpleado(ventas(l),l)} -1]| \\ }{[listaIndicesVentasEmpleados(e,l)_{i}..listaIndicesVentasEmpleados(e,l)_{i+1}]| \\ } } | \selector{i}{\rangoca{-1}{\longitud{listaIndicesVentasEmpleados(e,l)}}} ]}
+}
+
+\aux{mayorDistanciaEntreIndices}{e: Empleado, l:Local}{\ent}{
+[listaDistanciaEntreIndices(e,l)_{i} |\\ \forall \selector{i}{\rangoca{0}{\longitud{listaDistanciaEntreIndices(e,l)}}}, \exists \selector{j}{\rangoca{0}{\longitud{listaDistanciaEntreIndices(e,l)}}}, \\ listaDistanciaEntreIndices(e,l)_{i} \geq listaDistanciaEntreIndices(e,l)_{j}]_{0}
+}
+
+\aux{empleadoMayorDescanso}{l:Local}{Empleado}{
+[empleados(l)_{i} |\forall \selector{i}{\rangoac{0}{\longitud{empleados(l)}}}, \\ \exists \selector{j}{\rangoac{0}{\longitud{empleados(l)}}}, i \neq j, mayorDistanciaEntreIndices(empleados(l)_{i},l) > \\ mayorDistanciaEntreIndices(empleados(l)_{j},l)]_{0}
+}
+
 
 
 

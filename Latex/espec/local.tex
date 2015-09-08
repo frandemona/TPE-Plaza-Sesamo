@@ -80,8 +80,8 @@
 
 
 \begin{problema}{elVagonetaL}{l: Local}{Empleado}
-%problema elVagonetaL (l: Local) = result : Empleado
-%Devuelve el empleado actual que mas descanso se tom ́o entre pedido y pedido. Por ejemplo, si los empleados son A, B y C, y atendieron los pedidos en el siguiente orden: A-B-C-B-C-B-C-B-C-B-A, el descanso m ́as largo es el de A (9 ventas), porque B solo tiene descansos de una venta, y el descanso m ́as lardo de C es de 2 ventas. En el caso de que un empleado no hubiese atendido pedidos, se toma que su descanso es la cantidad total de ventas que se hicieron en el local. En el caso de que un empleado hubiese atendido al menos un pedido, tener en cuenta que tambi ́en se contabilizan como descansos a) la cantidad de pedidos entre el comienzo y el primer pedido que atendio, y b) entre el ultimo pedido que atendio y el total de pedidos.
+\requiere[hayEmpleados]{ \longitud{empleados(l)} > 0 } 
+\asegura{\res == empleadoMayorDescanso(l)}
 \end{problema}
 
 \begin{problema}{anularPedidoL}{l: Local, n: \ent}{}
