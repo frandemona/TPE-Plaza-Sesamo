@@ -83,7 +83,7 @@
 }
 
 \aux{despedirEmpleadoLocal}{l:Local,e: Empleado}{\TLista{Empleado}}{
-[empleados(l)_{i} | \selector{i}{\longitud{empleados(l)}},\\ empleados(l)_{i} \neq e ]
+[empleados(l)_{i} | \selector{i}{\rangoca{0}{\longitud{empleados(l)}}},\\ empleados(l)_{i} \neq e ]
 }
 
 \aux{agregarDesempleadoLocal}{l:Local,e: Empleado}{\TLista{Empleado}}{
@@ -95,11 +95,11 @@
 }
 
 \aux{ventasEmpleadoPedidos}{l: Local,e: Empleado}{\TLista{Pedido}}{
-[ ventas(l)_{i} | \selector{i}{\longitud{ventas(l)}}, \\ atendio(ventas(l)_{i}) == e ]
+[ ventas(l)_{i} | \selector{i}{\rangoca{0}{\longitud{ventas(l)}}}, \\ atendio(ventas(l)_{i}) == e ]
 }
 
 \aux{cantidadCombosPedidos}{pedidos:\TLista{Pedido}}{\ent}{
-| [ combos(p)_{i} | \selector{p}{pedidos}, \selector{i}{\longitud{combos(p)}} ] | 
+| [ combos(p)_{i} | \selector{p}{pedidos}, \selector{i}{\rangoca{0}{\longitud{combos(p)}}} ] | 
 }
 
 \aux{mejoresEmpleados}{l: Local}{\TLista{Empleado}}{

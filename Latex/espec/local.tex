@@ -35,14 +35,9 @@
 \end{problema}
 
 \begin{problema}{unaVentaCadaUno}{l:Local}{\bool}
-
-\asegura{\res == lista}
-%quienAtiendeVentasEmpleado(ventas(l),l) me da la lista de empleados actuales que atendieron los pedidos
-
-%problema unaVentaCadaUno (l:Local) = result : Bool
-%Indica si las ventas que realizaron los empleados actuales del local l, fueron hechas rotando de manera estricta. Ejemplo:
-%Si los empleados actuales del local l son A,B,C, y D es un ex-empleado y se realizaron las ventas B,D,A,D,C,B,D,D,A,C,B,A deber ́ıa devolver verdadero(las ventas de D no deben considerarse ya que corresponde a un ex-empleado).
-
+\requiere[hayEmpleados]{ \longitud{empleados(l)} > 0 } 
+\requiere[alMenosUnaVenta]{ (\forall \selector{e}{empleados(l)}, \exists \selector{p}{ventas(l)} ) atendio(p) == e } 
+\asegura{\res == (\forall \selector{i}{\rangoca{0}{\longitud{quienAtiendeVentasEmpleado(ventas(l),l)} - \longitud{empleados(l)}}}) \\ quienAtiendeVentasEmpleado(ventas(l),l)_{i} == quienAtiendeVentasEmpleado(ventas(l),l)_{i + \longitud{empleados(l)} }}
 \end{problema}
 
 \begin{problema}{venderL}{l: Local, p:Pedido}{}
@@ -105,7 +100,7 @@
 }
 \asegura{mayorNumeroPedido(ventas(\pre{l})) - 1 == mayorNumeroPedido(ventas(l))}
 \asegura{mismosPedidosNoNumero(ventas(l), eliminarPedidoVentasNumero(\pre{l}, n))}
-\asegura{(\forall \selector{i}{\longitud{ventas(\pre{l})}}, numero(ventas(\pre{l})_{i}) \neq n ) \IfThenElse{ numero(ventas(\pre{l})_{i}) > n}{ \\ numero(ventas(\pre{l})_{i}) - 1 ==numero(ventas(l)_{i})}{numero(ventas(\pre{l})_{i}) ==numero(ventas(l)_{i}) } }
+\asegura{(\forall \selector{i}{\rangoca{0}{\longitud{ventas(\pre{l})}}}, numero(ventas(\pre{l})_{i}) \neq n ) \IfThenElse{ numero(ventas(\pre{l})_{i}) > n}{ \\ numero(ventas(\pre{l})_{i}) - 1 ==numero(ventas(l)_{i})}{numero(ventas(\pre{l})_{i}) ==numero(ventas(l)_{i}) } }
 
 \end{problema}
 
