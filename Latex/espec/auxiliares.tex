@@ -94,6 +94,67 @@
 \longitud{empleadosA} == \\ \longitud{empleadosB)} \land (\forall \selector{empleadoA}{empleadosA}, \selector{empleadoB}{empleadosB})  empleadoA == empleadoB
 }
 
+\aux{ventasEmpleadoPedidos}{l: Local,e: Empleado}{\TLista{Pedido}}{
+[ ventas(l)_{i} | \selector{i}{\longitud{ventas(l)}}, \\ atendio(ventas(l)_{i}) == e ]
+}
+
+\aux{cantidadCombosPedidos}{pedidos:\TLista{Pedido}}{\ent}{
+| [ combos(p)_{i} | \selector{p}{pedidos}, \selector{i}{\longitud{combos(p)}} ] | 
+}
+
+\aux{mejoresEmpleados}{l: Local}{\TLista{Empleado}}{
+[ e | \selector{e}{empleados(l)}, \lnot (( \exists \selector{m}{empleados(l)}) \\ (mejorEmpleado(m,e,l)))]
+}
+
+\aux{mejorEmpleado}{eA: Empleado,eB: Empleado,l:Local}{\bool}{
+\longitud{ventasEmpleadoPedidos(l,eA)} > \\ \longitud{ventasEmpleadoPedidos(l,eB)} \lor (\longitud{ventasEmpleadoPedidos(l,eA)} == \longitud{ventasEmpleadoPedidos(l,eB)} \land \\ cantidadCombosPedidos(ventasEmpleadoPedidos(l,eA)) > \\ cantidadCombosPedidos(ventasEmpleadoPedidos(l,eB)))
+}
+
+\aux{pedidoLocal}{l: Local,n: \ent}{Pedido}{
+[p | \selector{p}{ventas(l)}, numero(p) == n]_{0}
+}
+
+\aux{esPedidoLocal}{l: Local,n: \ent}{\bool}{
+(\exists \selector{p}{ventas(l)}), numero(p) == n
+}
+
+\aux{pedidosIguales}{pA: Pedido, cB: Pedido}{\bool}{ 
+ numero(pA) == numero(pB) \land atendio(pA) == atendio(pB) \\ \land mismosCombosDePedidos(combos(pA),combos(pB))
+}
+
+\aux{mismosCombosDePedidos}{cA: \TLista{Combo}, cB: \TLista{Combo}}{\bool}{
+ \longitud{cA} == \longitud{cB} \land (\forall \selector{combo}{cA}) \\ cuentaCombosDePedidos(combo,cA) == cuentaCombosDePedidos(combo,cB)
+}
+
+\aux{cuentaCombosDePedidos}{combo: Combo, combos: \TLista{Combo}}{\ent}{
+| [ c | \selector{c}{combos}, combosIguales(combo, c) ] |
+}
+
+\aux{cantidadPedidosIguales}{pedido: Pedido, pA: \TLista{Pedido}}{\ent}{ 
+| [ p | \selector{p}{pA}, pedidosIguales(p,pedido) ] |
+}
+
+\aux{mismosPedidos}{pA: \TLista{Pedido}, pB: \TLista{Pedido}}{\bool}{ 
+\longitud{pA} == \longitud{pB} \land (\forall \selector{p}{pA}) cantidadPedidosIguales(p,pA) \\ == cantidadPedidosIguales(p,pB)
+}
+
+\aux{eliminarPedidoVentasNumero}{l: Local, n: \ent}{\TLista{Pedido}}{
+[p | \selector{p}{ventas(l)}, numero(p) \neq n]
+}
+
+\aux{mismosPedidosNoNumero}{pA: \TLista{Pedido}, pB: \TLista{Pedido}}{\bool}{ 
+\longitud{pA} == \longitud{pB} \land (\forall \selector{p}{pA}) \\ cantidadPedidosIgualesNoNumero(p,pA) == cantidadPedidosIgualesNoNumero(p,pB)
+}
+
+\aux{cantidadPedidosIgualesNoNumero}{pedido: Pedido, pA: \TLista{Pedido}}{\ent}{ 
+| [ p | \selector{p}{pA}, \\ pedidosIgualesNoNumero(p,pedido) ] |
+}
+
+\aux{pedidosIgualesNoNumero}{pA: Pedido, cB: Pedido}{\bool}{ 
+ atendio(pA) == atendio(pB) \land \\ mismosCombosDePedidos(combos(pA),combos(pB))
+}
+
+
 
 
 % los aux del tipo local
