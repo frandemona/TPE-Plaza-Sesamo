@@ -1,54 +1,131 @@
 
 \begin{problema}{stockBebidasL}{l: Local, b:Bebida}{Cantidad}
+\requiere{ bebidaPerteneceLocal(b,l) } 
+\asegura{ \res == stockBebidas(l,b)}
 \end{problema}
 
 \begin{problema}{stockSandwichesL}{l: Local, h:Hamburguesa}{Cantidad}
+\requiere{ sandwichPerteneceLocal(h,l) } 
+\asegura{ \res == stockSandwiches(l,h)}
 \end{problema}
 
 \begin{problema}{bebidasDelLocalL}{l: Local}{[Bebida]}
+\asegura{ mismos (\res , bebidasDelLocal(l))}
 \end{problema}
 	
 \begin{problema}{sandwichesDelLocalL}{l: Local}{[Hamburguesa]}
-	\asegura{\res = sandwichesDelLocal(l)}
+\asegura{ mismos (\res , sandwichesDelLocal(l))}
 \end{problema}
 
 \begin{problema}{empleadosL}{l: Local}{[Empleado]}
+\asegura{ mismos (\res , empleados(l))}
 \end{problema}
 
 \begin{problema}{desempleadosL}{l: Local}{[Empleado]}
+\asegura{ mismos (\res , desempleados(l))}
 \end{problema}
 
 \begin{problema}{energiaEmpleadoL}{l: Local, e:Empleado}{Energia}
+\requiere{ empleadoPerteneceLocal(e,l) } 
+\asegura{ \res == energiaEmpleado(l,e)}
 \end{problema}
 
 \begin{problema}{ventasL}{l: Local}{[Pedido]}
-	\asegura{\res = ventas(l)}
+\asegura{ mismos (\res , ventas(l))}
 \end{problema}
 
 \begin{problema}{unaVentaCadaUno}{l:Local}{\bool}
+\requiere[hayEmpleados]{ \longitud{empleados(l)} > 0 } 
+\requiere[alMenosUnaVenta]{ (\forall \selector{e}{empleados(l)}, \exists \selector{p}{ventas(l)} ) atendio(p) == e } 
+\asegura{\res == (\forall \selector{i}{\rangoca{0}{\longitud{quienAtiendeVentasEmpleado(ventas(l),l)} - \longitud{empleados(l)}}}) \\ quienAtiendeVentasEmpleado(ventas(l),l)_{i} == quienAtiendeVentasEmpleado(ventas(l),l)_{i + \longitud{empleados(l)} }}
 \end{problema}
 
 \begin{problema}{venderL}{l: Local, p:Pedido}{}
+\requiere[numeroPedidoCorrecto]{numero(p) == mayorNumeroPedido(ventas(\pre{l})) + 1}
+\requiere[empleadoDelLocal]{empleadoPerteneceLocal(atendio(p),\pre{l})}
+\requiere[tieneEnergiaSuficiente]{energiaEmpleado(\pre{l},atendio(p)) \geq energiaPedido(p)} % No estoy seguro de este requiere
+\requiere[stockSandwichSuficiente]{(\forall \selector{h}{sandwichDistintos(combos(p))}) ( stockSandwiches(\pre{l}, h) \\ - cuentaSandwich(h,combos(p))) > 0}
+\requiere[stockBebidaSuficiente]{(\forall \selector{b}{bebidaDistintos(combos(p))}) ( stockBebidas(\pre{l}, b) \\ - cuentaBebida(b,combos(p))) > 0}
+\modifica{l}
+\asegura{mismos(bebidasDelLocal(l),bebidasdelLocal(\pre{l}))}
+\asegura{mismos(sandwichesDelLocal(l),sandwichesDelLocal(\pre{l}))}
+\asegura{mismosEmpleados(empleados(l) \masmas desempleados(l),empleados(\pre{l}) \masmas desempleados(\pre{l}))}
+\asegura{(\forall \selector{b}{bebidaDistintos(combos(p))}) (stockBebidas(\pre{l}, b) \\ - cuentaBebida(b,combos(p))) == stockBebidas(l,b)}
+\asegura{(\forall \selector{h}{sandwichDistintos(combos(p))}) (stockSandwiches(\pre{l}, h) \\ - cuentaSandwich(h,combos(p))) == stockSandwiches(l,b)}
+\asegura{\IfThenElse{(energiaEmpleado(\pre{l},atendio(p)) - energiaPedido(p)) > 0}{ \\(energiaEmpleado(\pre{l},atendio(p)) - energiaPedido(p)) == energiaEmpleado(l,atendio(p))}{ \\mismosEmpleados(desempleados(l),agregarDesempleadoLocal(\pre{l},atendio(p))) \land \\ mismosEmpleados(empleados(l),despedirEmpleadoLocal(\pre{l},atendio(p))) }}
+\asegura{\longitud{ventas(l)} == \longitud{ventas(\pre{l})} +1}
+\asegura{numero(p) == mayorNumeroPedido(ventas(l))}
+\asegura{mismosPedidos(ventas(l), ventas(\pre{l}) \masmas p )}
+
 \end{problema}
 
 \begin{problema}{candidatosAEmpleadosDelMesL}{l: Local}{[Empleado]}
+\asegura{mismosEmpleados( \res ,mejoresEmpleados(l))}
 \end{problema}
 
 
 \begin{problema}{sancionL}{l: Local, e:Empleado, n:Energia}{}
-	\modifica l
-	\requiere{e \in empleados(l)}
-	\requiere{energiaEnRango(n)}
-	\asegura{if\ energiaEnRango(energiaEmpleado(pre(l),e) - n)\ then\ energiaEmpleado(l,e) =\\energiaEmpleado(pre(l),e) - n\ else\ mismos(desempleados(l),desempleados(pre(l))++e) \wedge \\mismos(empleados(l),sancionarE(pre(l),e)}
+\requiere{energiaEnRango(n)}
+\requiere[empleadoDelLocal]{empleadoPerteneceLocal(e,\pre{l})}
+\modifica{l}
+\asegura{mismos(bebidasDelLocal(l),bebidasdelLocal(\pre{l}))}
+\asegura{mismos(sandwichesDelLocal(l),sandwichesDelLocal(\pre{l}))}
+\asegura{mismosEmpleados(empleados(l) \masmas desempleados(l),empleados(\pre{l}) \masmas desempleados(\pre{l}))}
+\asegura{mismos(ventas(l),ventas(\pre{l}))}
+\asegura{(\forall \selector{b}{bebidasDelLocal(\pre{l})})stockBebidas(\pre{l}, b) == stockBebidas(l,b)}
+\asegura{(\forall \selector{empleado}{empleados(\pre{l})}, e \neq empleado)energiaEmplado(\pre{l}, empleado) == \\ energiaEmpleado(l,empleado)}
+\asegura{(\forall \selector{h}{sandwichesDelLocal(\pre{l})}) stockSandwiches(\pre{l}, h) == stockSandwiches(l,h)}
+\asegura{\IfThenElse{(energiaEmpleado(\pre{l},e) - n) > 0}{ (energiaEmpleado(\pre{l},e) - n) == energiaEmpleado(l,e) \\ }{ mismosEmpleados(desempleados(l),agregarDesempleadoLocal(\pre{l},e)) \land \\ mismosEmpleados(empleados(l),despedirEmpleadoLocal(\pre{l},e)) }}
 \end{problema}
 
 
 
 \begin{problema}{elVagonetaL}{l: Local}{Empleado}
+\requiere[hayEmpleados]{ \longitud{empleados(l)} > 0 } 
+\asegura{\res == empleadoMayorDescanso(l)}
 \end{problema}
 
 \begin{problema}{anularPedidoL}{l: Local, n: \ent}{}
+\requiere{esPedidoLocal(\pre{l},n)}
+\requiere[empleadoDelLocal]{empleadoPerteneceLocal(atendio(pedidoLocal(\pre{l},n)),\pre{l})}
+\modifica{l}
+\asegura{mismos(bebidasDelLocal(l),bebidasdelLocal(\pre{l}))}
+\asegura{mismos(sandwichesDelLocal(l),sandwichesDelLocal(\pre{l}))}
+\asegura{mismosEmpleados(empleados(l),empleados(\pre{l}))}
+\asegura{mismosEmpleados(desempleados(l),desempleados(\pre{l}))}
+\asegura{\longitud{ventas(l)} == \longitud{ventas(\pre{l})} - 1}
+\asegura{(\forall \selector{b}{bebidaDistintos(combos(pedidoLocal(\pre{l},n)))}) (stockBebidas(\pre{l}, b) \\ + cuentaBebida(b,combos(pedidoLocal(\pre{l},n)))) == stockBebidas(l,b)}
+\asegura{(\forall \selector{h}{sandwichDistintos(combos(pedidoLocal(\pre{l},n)))}) (stockSandwiches(\pre{l}, h) \\ - cuentaSandwich(h,combos(pedidoLocal(\pre{l},n)))) == stockSandwiches(l,b)}
+\asegura{(\forall \selector{e}{empleados(\pre{l})}, atendio(pedidoLocal(\pre{l},n)) \neq e)energiaEmplado(\pre{l}, e) == \\ energiaEmpleado(l,e)}
+\asegura{ (energiaEmpleado(\pre{l},atendio(pedidoLocal(\pre{l},n))) + energiaPedido(pedidoLocal(\pre{l},n))) == energiaEmpleado(l,atendio(pedidoLocal(\pre{l},n)))
+}
+\asegura{mayorNumeroPedido(ventas(\pre{l})) - 1 == mayorNumeroPedido(ventas(l))}
+\asegura{mismosPedidosNoNumero(ventas(l), eliminarPedidoVentasNumero(\pre{l}, n))}
+\asegura{(\forall \selector{i}{\rangoca{0}{\longitud{ventas(\pre{l})}}}, numero(ventas(\pre{l})_{i}) \neq n ) \IfThenElse{ numero(ventas(\pre{l})_{i}) > n}{ \\ numero(ventas(\pre{l})_{i}) - 1 ==numero(ventas(l)_{i})}{numero(ventas(\pre{l})_{i}) ==numero(ventas(l)_{i}) } }
+
 \end{problema}
 
 \begin{problema}{agregarComboAlPedidoL}{l: Local, c: Combo, n:\ent}{}
+\requiere{esPedidoLocal(\pre{l},n)}
+\requiere[empleadoDelLocal]{empleadoPerteneceLocal(atendio(pedidoLocal(\pre{l},n)),\pre{l})}
+\requiere[tieneEnergiaSuficiente]{energiaEmpleado(\pre{l},atendio(pedidoLocal(\pre{l},n)))) \geq \\ dificultad(c)}
+\requiere[stockSandwichSuficiente]{(stockSandwiches(\pre{l}, sandwich(c)) - 1) > 0}
+\requiere[stockBebidaSuficiente]{( stockBebidas(\pre{l}, bebida(c)) - 1) > 0}
+\modifica{l}
+\asegura{mismos(bebidasDelLocal(l),bebidasdelLocal(\pre{l}))}
+\asegura{mismos(sandwichesDelLocal(l),sandwichesDelLocal(\pre{l}))}
+\asegura{mismosEmpleados(empleados(l),empleados(\pre{l}))}
+\asegura{mismosEmpleados(desempleados(l),desempleados(\pre{l}))}
+\asegura{(\forall \selector{b}{bebidasDelLocal(\pre{l})}, b \neq bebida(c))stockBebidas(\pre{l}, b) == stockBebidas(l,b)}
+\asegura{(\forall \selector{e}{empleados(\pre{l})}, e \neq atendio((pedidoLocal(\pre{l},n)))energiaEmplado(\pre{l}, e) == \\ energiaEmpleado(l,e)}
+\asegura{(\forall \selector{h}{sandwichesDelLocal(\pre{l})}, h \neq sandwich(c)) stockSandwiches(\pre{l}, h) \\ == stockSandwiches(l,h)}
+\asegura{stockBebidas(\pre{l}, bebida(c)) == stockBebidas(l,bebida(c)) + 1}
+\asegura{stockSandwiches(\pre{l}, sandwich(c)) == stockSandwiches(l,sandwich(c)) + 1}
+\asegura{energiaEmplado(\pre{l}, atendio(pedidoLocal(\pre{l},n))) == \\ energiaEmpleado(l,atendio(pedidoLocal(\pre{l},n))) + dificultad(c)}
+\asegura{\longitud{ventas(l)} == \longitud{ventas(\pre{l})}}
+\asegura{mismosPedidos( eliminarPedidoVentasNumero(\pre{l}, n), eliminarPedidoVentasNumero(l, n)) }
+\asegura{ numero(pedidoLocal(\pre{l},n)) == numero(pedidoLocal(l,n))}
+\asegura{ atendio(pedidoLocal(\pre{l},n)) == atendio(pedidoLocal(l,n))}
+\asegura{ mismosCombosDePedidos(combos(pedidoLocal(\pre{l},n))++[c],combos(pedidoLocal(l,n)))}
+
  \end{problema}

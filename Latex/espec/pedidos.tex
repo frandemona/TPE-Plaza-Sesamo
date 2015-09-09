@@ -1,29 +1,64 @@
 
 \begin{problema}{nuevoP}{n: \ent, e: Empleado, cs: [Combo]}{Pedido}
+\requiere[numeroPositivo]{ n > 0} 
+\requiere[pideAlgo]{ \longitud{cs} > 0}
+\asegura{ n == numero(\res)}
+\asegura{ e == atendio(\res)}
+\asegura{ mismos (cs, combos(\res)}
 \end{problema}
 
 \begin{problema}{numeroP}{p: Pedido}{\ent}
-	\asegura{\res = numero(p)}
+\asegura{ \res == numero(p)}
 \end{problema}
 
 \begin{problema}{atendioP}{p: Pedido}{Empleado}
+\asegura{ \res == atendio(p)}
 \end{problema}
 
 \begin{problema}{combosP}{p: Pedido}{[Combo]}
+\asegura{ mismos (\res , combos(p))}
 \end{problema}
 
 \begin{problema}{agregarComboP}{p: Pedido, c: Combo}{}
+\modifica{p}
+\asegura{ numero(p) == numero(\pre{p})}
+\asegura{ atendio(p) == atendio(\pre{p})}
+\asegura{ \longitud{combos(p)} == \longitud{combos(\pre{p})} + 1}
+\asegura{ (\forall \selector{k}{\rangoca{0}{\longitud{combos(\pre{p})}}}) combosIguales(combos(p)_{k}, combos(\pre{p})_{k}) }
+\asegura{ combosIguales( c , combos(p)_{\longitud{combos(\pre{p})}} ) }
 \end{problema}
 
 \begin{problema}{anularComboP}{p: Pedido, i:\ent}{}
-	\modifica p
-	\requiere[iEnRango]{0 < i \leq numero(p)}
-	\asegura{numero(p) = numero(pre(p)) - 1}
-	\asegura{combos(p) = [combos(pre(p))_{j}\ |\ \forall j \selec [0..|combos(pre(p))|), j \neq i]}
+\requiere[enRango]{ 0 \leq i < \longitud{combos(\pre{p})}}
+\modifica{p}
+\asegura{ numero(p) == numero(\pre{p})}
+\asegura{ atendio(p) == atendio(\pre{p})}
+\asegura{ \longitud{combos(p)} == \longitud{combos(\pre{p})} - 1}
+\asegura{ (\forall \selector{k}{\rangoca{0}{i}}) combosIguales(combos(p)_{k}, combos(\pre{p})_{k}) }
+\asegura{ (\forall \selector{k}{\rangoca{i}{\longitud{combos(p)}}}) combosIguales(combos(p)_{k}, combos(\pre{p})_{k + 1}) }
 \end{problema}
 
 \begin{problema}{cambiarBebidaComboP}{p: Pedido, b: Bebida, i:\ent} {}
+\requiere[enRango]{ 0 \leq i \leq \longitud{combos(\pre{p})}}
+\modifica{p}
+\asegura{ numero(p) == numero(\pre{p})}
+\asegura{ atendio(p) == atendio(\pre{p})}
+\asegura{ \longitud{combos(p)} == \longitud{combos(\pre{p})}}
+\asegura{ (\forall \selector{k}{\rangoca{0}{i}}) combosIguales(combos(p)_{k}, combos(\pre{p})_{k}) }
+\asegura{ (\forall \selector{k}{\rangoca{i+1}{\longitud{combos(\pre{p})}}}) combosIguales(combos(p)_{k}, combos(\pre{p})_{k}) }
+\asegura{ sandwich(combos(p)_{i}) == sandwich(combos(\pre{p})_{i}) }
+%\asegura{ dificultad(combos(p)_{i}) == dificultad(combos(\pre{p})_{i}) } Segun el mail que mandaron la parte de dificultad no seria necesaria ya que cuando aclararon el problema elMezcladito dijeron "Si tienen distinta dificultad no se consideran distintos combos" al menos asegurar que la dificultad esta en rango?
+\asegura{ bebida(combos(p)_{i}) == b }
 \end{problema}
 
 \begin{problema}{elMezcladitoP}{p: Pedido}{}
+\requiere{ \longitud{combos(\pre{p})} \leq (cantidadSandwichDistintos(combos(\pre{p})) * \\ cantidadBebidaDistintos(combos(\pre{p}))) }
+\modifica{p}
+\asegura{ numero(p) == numero(\pre{p})}
+\asegura{ atendio(p) == atendio(\pre{p})}
+\asegura{ \longitud{combos(p)} == \longitud{combos(\pre{p})}}
+\asegura{ (\forall \selector{i}{\rangoca{0}{\longitud{combos(p)}}}, \forall \selector{j}{\rangoca{0}{\longitud{combos(p)}}}) i \neq j \land combosDistintos(combos(p)_{i},combos(p)_{j}) }
+\asegura{mismosSandwich(combos(p),combos(\pre{p}))}
+\asegura{mismosBebida(combos(p),combos(\pre{p}))}
+%Creo que falta terminarlo con algo
 \end{problema}
