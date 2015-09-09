@@ -24,7 +24,7 @@
 	\invariante[empleadosDistintos]{distintos(empleados(l)++desempleados(l))}
 	\invariante[energiaHasta100]{(\forall e \selec empleados(l)) energiaEnRango(energiaEmpleado(l,e))}
 	\invariante[empleadosQAtendieronDelLocal]{(\forall v \selec ventas(l)) atendio(v) \in empleados(l)++desempleados(l)}
-	\invariante[ventasCorrelativas]{\ldots}
-	\invariante[combosDeLocal]{(\forall v \selec ventas(l)) (\forall c \selec combos(v)) bebida(c) \in bebidasDelLocal(l) \wedge sandwich(c) \in sandwichesDelLocal(l)}
+	\invariante[ventasCorrelativas]{ \longitud{ \rango{menorNumeroPedido(ventas(l))}{mayorNumeroPedido(ventas(l))}} == \longitud{ ventas(l)} \land (\forall \selector{i}{\rango{menorNumeroPedido(ventas(l))}{mayorNumeroPedido(ventas(l))}},\\ \selector{j}{\rangoca{0}{\longitud{ventas(l)}}}) i == numero(ventas_{j})}
+	\invariante[combosDeLocal]{(\forall \selector{i}{sandwichLocal(ventas(l))}, \selector{j}{sandwichesDelLocal(l)}) i == j \land (\forall \selector{i}{bebidaLocal(ventas(l))}, \selector{j}{bebidasDelLocal(l)}) i == j }
 
 \end{tipo}

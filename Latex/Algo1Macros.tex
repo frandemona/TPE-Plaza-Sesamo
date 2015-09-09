@@ -1,7 +1,7 @@
 \usepackage{ifthen}
 \usepackage{amssymb}
 \usepackage{multicol}
-\usepackage{graphicx}
+%\usepackage{graphicx}
 \usepackage[absolute]{textpos}
 \makeatletter
 
@@ -12,7 +12,8 @@
   }%
 }
 {%
-  \usepackage[top=1cm,bottom=2cm,left=1cm,right=1cm]{geometry}%
+  %\usepackage[top=2.5cm,bottom=2cm,width=15cm,height= 24.5cm,left = 3cm]{geometry}%viejo
+  \usepackage[top=2.5cm,bottom=2cm,left=1.2cm,right=1.2cm]{geometry}%
   \usepackage{color}%
   \newcommand{\tocarEspacios}{%
     \addtolength{\leftskip}{5em}%
@@ -49,9 +50,9 @@
 
 % Primero definiciones de cosas al estilo title, author, date
 
-\def\materia#1{\gdef\@materia{#1}}
-\def\@materia{No especifi\'o la materia}
-\def\lamateria{\@materia}
+\def\materias#1{\gdef\@materias{#1}}%viejo comentado
+\def\@materias{No especifi\'o la materia}%viejo comentado
+\def\lamateria{\@materias}%viejo comentado
 
 \def\cuatrimestre#1{\gdef\@cuatrimestre{#1}}
 \def\@cuatrimestre{No especifi\'o el cuatrimestre}
