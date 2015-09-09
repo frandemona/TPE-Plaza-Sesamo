@@ -9,6 +9,7 @@
 \end{problema}
 	
 \begin{problema}{sandwichesDelLocalL}{l: Local}{[Hamburguesa]}
+	\asegura{\res = sandwichesDelLocal(l)}
 \end{problema}
 
 \begin{problema}{empleadosL}{l: Local}{[Empleado]}
@@ -21,6 +22,7 @@
 \end{problema}
 
 \begin{problema}{ventasL}{l: Local}{[Pedido]}
+	\asegura{\res = ventas(l)}
 \end{problema}
 
 \begin{problema}{unaVentaCadaUno}{l:Local}{\bool}
@@ -34,6 +36,10 @@
 
 
 \begin{problema}{sancionL}{l: Local, e:Empleado, n:Energia}{}
+	\modifica l
+	\requiere{e \in empleados(l)}
+	\requiere{energiaEnRango(n)}
+	\asegura{if\ energiaEnRango(energiaEmpleado(pre(l),e) - n)\ then\ energiaEmpleado(l,e) =\\energiaEmpleado(pre(l),e) - n\ else\ mismos(desempleados(l),desempleados(pre(l))++e) \wedge \\mismos(empleados(l),sancionarE(pre(l),e)}
 \end{problema}
 
 

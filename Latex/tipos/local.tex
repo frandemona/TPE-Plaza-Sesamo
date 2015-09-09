@@ -25,6 +25,6 @@
 	\invariante[energiaHasta100]{(\forall e \selec empleados(l)) energiaEnRango(energiaEmpleado(l,e))}
 	\invariante[empleadosQAtendieronDelLocal]{(\forall v \selec ventas(l)) atendio(v) \in empleados(l)++desempleados(l)}
 	\invariante[ventasCorrelativas]{\ldots}
-	\invariante[combosDeLocal]{\ldots}
+	\invariante[combosDeLocal]{(\forall v \selec ventas(l)) (\forall c \selec combos(v)) bebida(c) \in bebidasDelLocal(l) \wedge sandwich(c) \in sandwichesDelLocal(l)}
 
 \end{tipo}

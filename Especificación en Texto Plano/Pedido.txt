@@ -18,8 +18,7 @@ tipo Pedido {
 //Devuelve el número correspondiente al pedido p.
 
 6. problema numeroP (p: Pedido) = result : Z {
-	
-	
+	asegura result = numero(p);	
 }
 
 
@@ -51,8 +50,11 @@ tipo Pedido {
 //Dado un pedido p, anula el combo ubicado en la posición i del observador combos(p)
 
 10. problema anularComboP (p: Pedido, i:Z) {
-	
-	
+	modifica p;
+    requiere 0 < i <= numero(p);     
+    asegura numero(p) = numero(pre(p)) - 1;
+    asegura combos(p) = [combos(pre(p))_j | Vj->[0..|combos(pre(p))|), j /= i] 
+
 }
 
 

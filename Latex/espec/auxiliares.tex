@@ -15,7 +15,9 @@
 % los aux del tipo pedido
 
 \subsection{Local}
-
+\aux{sancionarE}{l: Local,e: Empleado} {[Empleados]}{
+	[empleados(l)_{i}\ |\ \forall i \selec [0..|empleados(l)|), empleados(l)_{i} \neq e]
+}
 % los aux del tipo local
 
 

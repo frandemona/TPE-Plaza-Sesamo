@@ -3,6 +3,7 @@
 \end{problema}
 
 \begin{problema}{numeroP}{p: Pedido}{\ent}
+	\asegura{\res = numero(p)}
 \end{problema}
 
 \begin{problema}{atendioP}{p: Pedido}{Empleado}
@@ -15,6 +16,10 @@
 \end{problema}
 
 \begin{problema}{anularComboP}{p: Pedido, i:\ent}{}
+	\modifica p
+	\requiere[iEnRango]{0 < i \leq numero(p)}
+	\asegura{numero(p) = numero(pre(p)) - 1}
+	\asegura{combos(p) = [combos(pre(p))_{j}\ |\ \forall j \selec [0..|combos(pre(p))|), j \neq i]}
 \end{problema}
 
 \begin{problema}{cambiarBebidaComboP}{p: Pedido, b: Bebida, i:\ent} {}

@@ -17,8 +17,7 @@ tipo Combo {
 //Devuelve la bebida correspondiente al combo c.
 
 2. problema bebidaC (c: Combo) = result : Bebida {
-	
-
+	asegura result = bebida(c);
 }
 
 

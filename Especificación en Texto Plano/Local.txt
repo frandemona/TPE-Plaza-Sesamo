@@ -30,7 +30,7 @@ en el medio. Ejemplo: 4,5,6,7 son correlativos. 4,5,7 no lo son. */
 
 // Los combos correspondiente a las ventas, son combos que se expenden en el local.
 
-14. invariante combosDeLocal : 
+14. invariante combosDeLocal : (∀v <- ventas(l)) (∀c <- combos(v)) bebida(c) ∈ bebidasDelLocal(l) ∧ sandwich(c) ∈ sandwichesDelLocal(l);
 
 
 // Devuelve el stock de bebida b en el local l.
@@ -60,8 +60,7 @@ en el medio. Ejemplo: 4,5,6,7 son correlativos. 4,5,7 no lo son. */
 // Devuelve la lista de sandwiches que se expenden en el local l.
 
 18. problema sandwichesDelLocalL (l: Local) = result : [Hamburguesa] {
-	
-
+	asegura result = sandwichesDelLocal(l);
 }
 
 
@@ -92,7 +91,7 @@ en el medio. Ejemplo: 4,5,6,7 son correlativos. 4,5,7 no lo son. */
 // Devuelve las ventas del local l.
 
 22. problema ventasL (l: Local) = result : [Pedido] {
-	
+	asegura result = ventas(l);
 
 }
 
@@ -131,10 +130,13 @@ la energía que tenía previo a vender el pedido, menos la sumatoria de las difi
 negativa, el mismo es despedido del local. */
 
 26. problema sancionL (l: Local, e:Empleado, n:Energia) {
-	
-
+	modifica l;
+    requiere e ∈ empleados(l);
+    requiere energiaEnRango(n);
+    asegura if energiaEnRango(energiaEmpleado(pre(l),e) - n) then energiaEmpleado(l,e) == energiaEmpleado(pre(l),e) - n else mismos(desempleados(l),desempleados(pre(l))++e) ∧ mismos(empleados(l),sancionarE(pre(l),e));
+    
 }
-
+aux sancionarE(l:Local,e:Empleado) : [Empleados] = [empleados(l)_i | ∀i -> [0..|empleados(l)|), empleados(l)_i /= e]
 
 /* Devuelve el empleado actual que más descanso se tomó entre pedido y pedido. Por ejemplo, si los empleados son A, B
 y C, y atendieron los pedidos en el siguiente orden: A-B-C-B-C-B-C-B-C-B-A, el descanso más largo es el de A (9
